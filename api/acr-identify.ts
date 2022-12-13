@@ -5,7 +5,7 @@ import formidable from "formidable";
 const acr = new acrcloud({
     host: process.env.ACR_HOST,
     access_key: process.env.ACR_ACCESS_KEY,
-    access_secret: process.env.ACR_ACCESS_SECRET
+    access_secret: process.env.ACR_SECRET
 });
 
 const form = formidable();

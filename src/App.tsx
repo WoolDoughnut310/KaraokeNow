@@ -1,11 +1,12 @@
 import './App.css'
+import MicrophoneInput from "./MicrophoneInput"
 
 export default function App() {
-    const error = useAtomValue
-  return (
-    <main>
-      React ⚛️ + Vite ⚡ + Replit 🌀
-        
-    </main>
-  )
+    return (
+        <main>
+            React ⚛️ + Vite ⚡ + Replit 🌀
+            <h1>KaraokeNow</h1>
+            <MicrophoneInput />
+        </main>
+    )
 }
