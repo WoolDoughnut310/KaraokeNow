@@ -1,0 +1,18 @@
+main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.errorContainer {
+    background-color: #f02929;
+    font-family: "Courier New", Courier, monospace;
+    padding: 10px;
+    margin: 30px;
+    height: 200px;
+    overflow: auto;
+    border-radius: 20px;
+}
