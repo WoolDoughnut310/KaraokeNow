@@ -1,16 +1,17 @@
 import type { VercelResponse, VercelRequest } from "@vercel/node";
-import acrcloud from "acrcloud";
+import acrcloud from "../acrcloud";
 import formidable from "formidable";
 
 const acr = new acrcloud({
-    host: process.env.ACR_HOST,
-    access_key: process.env.ACR_ACCESS_KEY,
-    access_secret: process.env.ACR_SECRET
+    host: process.env.ACR_HOST as string,
+    access_key: process.env.ACR_ACCESS_KEY as string,
+    access_secret: process.env.ACR_SECRET as string,
+    data_type: "audio",
 });
-
 const form = formidable();
 
-export default function(req: VercelRequest, res: VercelResponse) {
+// Responds with a music ISRC for an uploaded sample
+export default function (req: VercelRequest, res: VercelResponse) {
     try {
         form.parse(req, async (err, _fields, files) => {
             if (err) {
@@ -32,7 +33,7 @@ export default function(req: VercelRequest, res: VercelResponse) {
             const music = metadata.music[0];
 
             res.status(200).send(music.external_ids.isrc);
-        })
+        });
     } catch (err) {
         res.status(500).send(err);
     }
