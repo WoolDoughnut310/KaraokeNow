@@ -13,10 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@vercel/node": "^2.8.0",
+    "acrcloud": "^1.4.0",
     "axios": "^1.2.1",
     "dotenv": "^16.0.3",
     "form-data": "^4.0.0",
     "formidable": "^2.1.1",
+    "formidable-serverless": "^1.1.1",
     "jotai": "^1.11.2",
     "react-feather": "^2.0.10",
     "react-media-recorder": "^1.6.6"

@@ -5,35 +5,44 @@ const BASE_URL = "https://api.musixmatch.com/ws/1.1/";
 
 const baseParams = {
     apikey: process.env.MUSIXMATCH_API_KEY as string,
-    format: "json"
-}
+    format: "json",
+};
 
 // Find the lyrics for a given track by its ISRC
 export default async function (req: VercelRequest, res: VercelResponse) {
     try {
         const { isrc } = req.query;
 
-        let response = await axios.get(BASE_URL + "track.get", {params: {
-            ...baseParams,
-            track_isrc: isrc
-        }});
+        if (!isrc) {
+            res.status(400).send("Song ISRC required");
+            return;
+        }
+
+        let response = await axios.get(BASE_URL + "track.get", {
+            params: {
+                ...baseParams,
+                track_isrc: isrc,
+            },
+        });
 
         const track = response.data.message.body.track;
 
         console.log("got response", track);
-        res.status(200).json(track);
 
-        response = await axios.get(BASE_URL + "track.lyrics.get", {params: {
-            ...baseParams,
-            track_id: track.track_id
-        }});
+        response = await axios.get(BASE_URL + "track.lyrics.get", {
+            params: {
+                ...baseParams,
+                track_id: track.track_id,
+            },
+        });
+        console.log("got rsponse", response.data);
 
-        const lyrics = response.data.message.body.lyric.lyrics_body;
+        const lyrics = response.data.message.body.lyrics.lyrics_body;
 
         const title = `${track.track_name} by ${track.artist_name}`;
 
-        res.status(200).json({title, lyrics});
+        res.status(200).json({ title, lyrics });
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send((err as Error).message);
     }
 }
