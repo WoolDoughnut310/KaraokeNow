@@ -1,6 +1,7 @@
 import type { VercelResponse, VercelRequest } from "@vercel/node";
-import acrcloud from "../acrcloud";
-import formidable from "formidable";
+import { readFile } from "fs/promises";
+const acrcloud = require("acrcloud");
+const formidable = require("formidable-serverless");
 
 const acr = new acrcloud({
     host: process.env.ACR_HOST as string,
@@ -11,30 +12,45 @@ const acr = new acrcloud({
 const form = formidable();
 
 // Responds with a music ISRC for an uploaded sample
-export default function (req: VercelRequest, res: VercelResponse) {
+export default async function (req: VercelRequest, res: VercelResponse) {
     try {
-        form.parse(req, async (err, _fields, files) => {
-            if (err) {
-                throw new Error(err);
-            }
+        const { files } = await new Promise<{
+            fields: any;
+            files: { file: any };
+        }>((resolve, reject) =>
+            form.parse(
+                req,
+                async (
+                    err: string | undefined,
+                    fields: any,
+                    files: { file: any }
+                ) => {
+                    if (err) {
+                        reject(err);
+                    }
 
-            const file = files.file as any;
-            const data = await acr.identify(file.filepath);
-            const metadata = data.metadata;
+                    resolve({ fields, files });
+                }
+            )
+        );
 
-            if (data.status.code !== 0) {
-                throw new Error(data.status.msg);
-            }
+        const file = files.file as any;
+        const fileData = await readFile(file.path);
+        const data = await acr.identify(fileData);
+        const metadata = data.metadata;
 
-            if (metadata.music?.length === 0) {
-                throw new Error("No music found");
-            }
+        if (data.status.code !== 0) {
+            throw new Error(data.status.msg);
+        }
 
-            const music = metadata.music[0];
+        if (metadata.music?.length === 0) {
+            throw new Error("No music found");
+        }
 
-            res.status(200).send(music.external_ids.isrc);
-        });
+        const music = metadata.music[0];
+
+        res.status(200).json(music.external_ids.isrc);
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send((err as Error).message);
     }
 }
