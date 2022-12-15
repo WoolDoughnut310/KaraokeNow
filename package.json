@@ -13,18 +13,24 @@
   "license": "ISC",
   "dependencies": {
     "@vercel/node": "^2.8.0",
-    "acrcloud": "^1.4.0",
+    "axios": "^1.2.1",
+    "form-data": "^4.0.0",
     "formidable": "^2.1.1",
     "jotai": "^1.11.2",
-    "react-feather": "^2.0.10"
+    "musixmatch": "^0.1.6",
+    "react-feather": "^2.0.10",
+    "react-media-recorder": "^1.6.6"
   },
   "devDependencies": {
     "@types/formidable": "^2.0.5",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tailwindcss": "^3.2.4",
     "typescript": "^4.7.4",
     "typescript-language-server": "^0.11.2",
     "vite": "^3.0.4"
