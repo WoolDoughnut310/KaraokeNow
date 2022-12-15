@@ -13,14 +13,18 @@ export default function MicrophoneInput() {
             onSubmit(blob);
         },
     });
+    console.log(status);
 
     const onClick = async () => {
         if (status === "recording") {
             return;
         }
 
-        startRecording();
-        setTimeout(stopRecording, 20000);
+        await startRecording();
+
+        await new Promise((resolve) => {
+            setTimeout(resolve, 20000);
+        });
     };
 
     const onSubmit = async (blob: Blob) => {
@@ -28,11 +32,16 @@ export default function MicrophoneInput() {
         body.append("file", blob);
 
         try {
-            const response = await axios.post(`/acr-identify`, body, {
+            let response = await axios.post("/api/acr-identify", body, {
                 timeout: 30000,
             });
 
-            const data = response.data;
+            const trackISRC = response.data;
+
+            response = await axios.get("/api/find-lyrics", {params: {isrc: trackISRC}});
+            const lyrics = response.data;
+
+            setLyrics(lyrics)
         } catch (err) {
             setError((err as Error).message);
         }

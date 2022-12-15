@@ -1,3 +1,4 @@
+import React from "react";
 import MicrophoneInput from "./MicrophoneInput";
 
 export default function App() {
