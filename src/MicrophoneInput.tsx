@@ -22,7 +22,7 @@ export default function MicrophoneInput() {
 
     const updateProgress = () => {
         const recordPercentage =
-            Math.max(0, endTime - new Date().getTime()) / RECORD_DURATION;
+            Math.max(0, endTime - Date.now()) / RECORD_DURATION;
         setProgressHeight(
             recordPercentage === 0 ? 100 : recordPercentage * 100
         );
@@ -36,7 +36,7 @@ export default function MicrophoneInput() {
 
         await startRecording();
 
-        setEndTime(new Date().getTime() + RECORD_DURATION);
+        setEndTime(Date.now() + RECORD_DURATION);
 
         await new Promise((resolve) => {
             setTimeout(resolve, RECORD_DURATION);

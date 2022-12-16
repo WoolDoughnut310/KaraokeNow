@@ -9,7 +9,7 @@ const baseParams = {
 };
 
 // Find the lyrics for a given track by its ISRC
-export default async function (req: VercelRequest, res: VercelResponse) {
+export default async function(req: VercelRequest, res: VercelResponse) {
     try {
         const { isrc } = req.query;
 
@@ -38,7 +38,6 @@ export default async function (req: VercelRequest, res: VercelResponse) {
         console.log("got rsponse", response.data);
 
         const lyrics = response.data.message.body.lyrics.lyrics_body;
-
         const title = `${track.track_name} by ${track.artist_name}`;
 
         res.status(200).json({ title, lyrics });

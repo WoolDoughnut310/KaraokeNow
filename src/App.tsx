@@ -1,9 +1,10 @@
-import { useAtomValue } from "jotai";
 import React from "react";
-import LyricsBody from "./LyricsBody";
+import { useAtomValue } from "jotai";
+import LyricsBody from "./lyrics/LyricsBody";
 import MicrophoneInput from "./MicrophoneInput";
 import SongTitle from "./SongTitle";
 import { lyricsAtom } from "./store";
+import SongRateInput from "./SongRateInput";
 
 export default function App() {
     const lyrics = useAtomValue(lyricsAtom);
@@ -15,6 +16,7 @@ export default function App() {
             <>
                 <SongTitle />
                 <LyricsBody />
+                <SongRateInput />
             </>
         );
 
