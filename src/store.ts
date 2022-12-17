@@ -34,15 +34,24 @@ let L =
 // Displaying lyrics
 export const lyricsAtom = atom("");
 export const currentWordAtom = atom(0);
-export const nextWordAtom = atom(
-    null,
-    (get, set) => {
-        const words = [...get(lyricsAtom).matchAll(/[\w']+/g)].map((match) => match[0]);
-        set(currentWordAtom, (prev) => {
-            if (prev >= words.length - 1) {
-                return 0
-            }
-            return prev + 1
-        });
-    }
-);
+
+// Allows changing the index of the next word to highlight
+export const newWordAtom = atom(-1);
+
+// Write-only atom, updates the index of the highlighted word
+export const nextWordAtom = atom(null, (get, set) => {
+    // Get every word in the lyrics
+    const words = [...get(lyricsAtom).matchAll(/[\w']+/g)].map(
+        (match) => match[0]
+    );
+    set(currentWordAtom, (prev) => {
+        // Override the new word index with any value in `newWordAtom`
+        const newWord = get(newWordAtom);
+        if (newWord !== -1) {
+            set(newWordAtom, -1);
+            return newWord;
+        }
+
+        return (prev + 1) % words.length;
+    });
+});
