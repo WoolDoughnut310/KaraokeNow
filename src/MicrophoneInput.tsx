@@ -21,13 +21,11 @@ export default function MicrophoneInput() {
     const [progressHeight, setProgressHeight] = useState(100);
 
     const updateProgress = () => {
-        const recordPercentage =
-            Math.max(0, endTime - Date.now()) / RECORD_DURATION;
+        // elapsed time / duration
+        const recorded = Math.max(0, endTime - Date.now()) / RECORD_DURATION;
 
-        // Set the height to full when completed
-        setProgressHeight(
-            recordPercentage === 0 ? 100 : recordPercentage * 100
-        );
+        // Reset the height to full when completed
+        setProgressHeight(recorded === 0 ? 100 : recorded * 100);
         window.requestAnimationFrame(updateProgress);
     };
 
@@ -64,9 +62,7 @@ export default function MicrophoneInput() {
         body.append("file", blob);
 
         try {
-            let response = await axios.post("/api/acr-identify", body, {
-                timeout: 30000,
-            });
+            let response = await axios.post("/api/acr-identify", body);
 
             const trackISRC = response.data;
 

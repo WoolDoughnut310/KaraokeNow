@@ -14,10 +14,12 @@ export default function LyricWord({ index, word }: LyricWordProps) {
 
     useEffect(() => {
         if (index !== currentWord || elementRef.current === null) return;
+        // Scroll the higlighted word into view
         elementRef.current.scrollIntoView();
     }, [currentWord]);
 
-    const updateCurrentWord = () => {
+    // Override the value for the current word when clicked
+    const onClick = () => {
         setNewWord(index);
     };
 
@@ -27,7 +29,7 @@ export default function LyricWord({ index, word }: LyricWordProps) {
 
     if (index === currentWord) {
         highlight = "text-purple-800 font-bold border-2 p-2 rounded-xl";
-    } else if (distanceToCurrent < 2) {
+    } else if (distanceToCurrent == 1) {
         highlight = "text-purple-400";
     } else {
         highlight = "text-gray-700";
@@ -37,7 +39,7 @@ export default function LyricWord({ index, word }: LyricWordProps) {
         <span
             ref={elementRef}
             className={`cursor-pointer translate-y-20 ${highlight}`}
-            onClick={updateCurrentWord}
+            onClick={onClick}
             title="Skip here"
         >
             {word}

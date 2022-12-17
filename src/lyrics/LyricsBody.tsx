@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import { lyricsAtom, nextWordAtom, songRateAtom } from "../store";
 import parseLyrics from "./parser";
@@ -7,8 +7,6 @@ export default function LyricsBody() {
     const lyrics = useAtomValue(lyricsAtom);
     const nextWord = useSetAtom(nextWordAtom);
     const songRate = useAtomValue(songRateAtom);
-
-    const previousTimeRef = useRef(0);
 
     const segments = useMemo(() => parseLyrics(lyrics), [lyrics]);
 
@@ -23,21 +21,21 @@ export default function LyricsBody() {
             if (!start) {
                 start = time;
                 previousTime = time;
-            }   
-            
-            if ((time - previousTime) >= delay) {
+            }
+
+            if (time - previousTime >= delay) {
                 nextWord();
                 previousTime = time;
             }
-            
+
             request = window.requestAnimationFrame(animateWords);
-        }
+        };
 
         request = window.requestAnimationFrame(animateWords);
 
         return () => {
             window.cancelAnimationFrame(request);
-        }
+        };
     }, [songRate]);
 
     return (
