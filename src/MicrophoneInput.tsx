@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { Mic, Activity } from "react-feather";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useSetAtom } from "jotai";
 import { errorAtom, lyricsAtom, titleAtom } from "./store";
 
@@ -23,6 +23,8 @@ export default function MicrophoneInput() {
     const updateProgress = () => {
         const recordPercentage =
             Math.max(0, endTime - Date.now()) / RECORD_DURATION;
+
+        // Set the height to full when completed
         setProgressHeight(
             recordPercentage === 0 ? 100 : recordPercentage * 100
         );
@@ -34,8 +36,11 @@ export default function MicrophoneInput() {
             return;
         }
 
+        // Clear the error when recording again
+        setError("");
         await startRecording();
 
+        // Trigger the animation to start
         setEndTime(Date.now() + RECORD_DURATION);
 
         await new Promise((resolve) => {
@@ -73,7 +78,15 @@ export default function MicrophoneInput() {
             setTitle(title);
             setLyrics(lyrics);
         } catch (err) {
-            setError((err as Error).message);
+            let message: string;
+
+            if (err instanceof AxiosError) {
+                message = err.response?.data;
+            } else {
+                message = (err as Error).message;
+            }
+
+            setError(message);
         }
     };
 

@@ -5,6 +5,7 @@ import MicrophoneInput from "./MicrophoneInput";
 import SongTitle from "./SongTitle";
 import { lyricsAtom } from "./store";
 import SongRateInput from "./SongRateInput";
+import ErrorMessage from "./ErrorMessage";
 
 export default function App() {
     const lyrics = useAtomValue(lyricsAtom);
@@ -25,6 +26,7 @@ export default function App() {
             <h1 className="font-bold font-sans text-6xl">KaraokeNow</h1>
             <p className="mb-5">React ⚛️ + Vite ⚡ + Replit 🌀</p>
             {renderedChild}
+            <ErrorMessage />
         </main>
     );
 }
