@@ -4,6 +4,7 @@ import { useAtomValue } from "jotai";
 
 export default function ErrorMessage() {
     const error = useAtomValue(errorAtom);
+    if (!error) return;
 
     return (
         <div className="bg-red-500 px-6 py-4 m-7 h-24 flex overflow-auto rounded-2xl">
