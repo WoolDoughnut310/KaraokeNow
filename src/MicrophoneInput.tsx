@@ -78,7 +78,7 @@ export default function MicrophoneInput() {
       console.log("the error is", err);
 
       if (err instanceof AxiosError) {
-        message = err.response?.data;
+        message = err.response?.data?.message;
       } else {
         message = (err as Error).message;
       }
