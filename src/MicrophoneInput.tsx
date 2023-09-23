@@ -64,14 +64,16 @@ export default function MicrophoneInput() {
     try {
       let response = await axios.post("/api/acr-identify", body);
 
-      const trackISRC = response.data;
+      const trackName = response.data;
 
-      response = await axios.get("/api/find-lyrics", {
-        params: { isrc: trackISRC },
+      response = await axios.post("/api/lyrics", {
+        access_token,
+        q: trackName,
       });
-      const { title, lyrics } = response.data;
 
-      setTitle(title);
+      const lyrics = response.data;
+
+      setTitle(trackName);
       setLyrics(lyrics);
     } catch (err) {
       let message: string;
