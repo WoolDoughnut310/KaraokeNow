@@ -16,6 +16,7 @@
     "acrcloud": "^1.4.0",
     "axios": "^1.2.1",
     "cheerio": "^1.0.0-rc.12",
+    "cookie": "^0.5.0",
     "formidable": "^3.5.1",
     "formidable-serverless": "^1.1.1",
     "jotai": "^1.11.2",
@@ -25,7 +26,8 @@
     "simple-oauth2": "^5.0.0"
   },
   "devDependencies": {
-    "@types/formidable": "^2.0.5",
+    "@types/cookie": "^0.5.2",
+    "@types/formidable": "^2.0.6",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/simple-oauth2": "^5.0.4",

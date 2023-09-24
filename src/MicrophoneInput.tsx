@@ -64,23 +64,22 @@ export default function MicrophoneInput() {
     try {
       let response = await axios.post("/api/acr-identify", body);
 
-      const trackName = response.data;
+      const { title, artists } = response.data;
 
-      response = await axios.post("/api/lyrics", {
-        access_token,
-        q: trackName,
-      });
+      const query = `${artists}: ${title}`;
+
+      response = await axios.get("/api/lyrics", { params: { q: query } });
 
       const lyrics = response.data;
 
-      setTitle(trackName);
+      setTitle(`${title} by ${artists}`);
       setLyrics(lyrics);
     } catch (err) {
       let message: string;
       console.log("the error is", err);
 
       if (err instanceof AxiosError) {
-        message = err.response?.data?.message;
+        message = err.response?.data;
       } else {
         message = (err as Error).message;
       }

@@ -6,13 +6,21 @@ import SongTitle from "./SongTitle";
 import { lyricsAtom } from "./store";
 import SongRateInput from "./SongRateInput";
 import ErrorMessage from "./ErrorMessage";
+import AuthButton from "./AuthButton";
+import cookie from "cookie";
 
 export default function App() {
   const lyrics = useAtomValue(lyricsAtom);
 
+  const accessToken = cookie.parse(document.cookie)["accessToken"];
+
   const renderedChild =
     lyrics === "" ? (
-      <MicrophoneInput />
+      accessToken === "" ? (
+        <AuthButton />
+      ) : (
+        <MicrophoneInput />
+      )
     ) : (
       <>
         <SongTitle />

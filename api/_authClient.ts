@@ -12,4 +12,4 @@ export const client = new AuthorizationCode({
   },
 });
 
-export const redirectUri = "http://localhost:3000/auth-callback";
+export const redirectUri = "http://localhost:3000/api/auth-callback";

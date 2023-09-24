@@ -1,4 +1,5 @@
 import type { VercelResponse, VercelRequest } from "@vercel/node";
+import { Fields, Files } from "formidable";
 import { readFile } from "fs/promises";
 const acrcloud = require("acrcloud");
 const formidable = require("formidable-serverless");
@@ -11,23 +12,20 @@ const acr = new acrcloud({
 });
 const form = formidable();
 
-// Responds with a music ISRC for an uploaded sample
+// Responds the track name of an uploaded sample
 export default async function (req: VercelRequest, res: VercelResponse) {
   try {
     const { files } = await new Promise<{
-      fields: any;
-      files: { file: any };
+      fields: Fields;
+      files: Files;
     }>((resolve, reject) =>
-      form.parse(
-        req,
-        async (err: string | undefined, fields: any, files: { file: any }) => {
-          if (err) {
-            reject(err);
-          }
-
-          resolve({ fields, files });
+      form.parse(req, async (err: any, fields: Fields, files: Files) => {
+        if (err) {
+          reject(err);
         }
-      )
+
+        resolve({ fields, files });
+      })
     );
 
     const file = files.file as any;
@@ -46,11 +44,11 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     const music = metadata.music[0];
 
     const title = music.title;
-    const artists = music.artists.map((artist) => artist.name);
+    const artists = music.artists
+      .map((artist: { [key: string]: string }) => artist.name)
+      .join(", ");
 
-    const trackName = `${title} by ${artists.join(", ")}`;
-
-    res.status(200).json(trackName);
+    res.status(200).json({ title, artists });
   } catch (err) {
     res.status(500).send((err as Error).message);
   }
